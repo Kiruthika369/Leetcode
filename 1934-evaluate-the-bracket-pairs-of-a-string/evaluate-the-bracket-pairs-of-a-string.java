@@ -1,31 +1,29 @@
 class Solution {
-
     public String evaluate(String s, List<List<String>> knowledge) {
-        Map<String, String> dict = new HashMap<>();
-        for (List<String> kd : knowledge) {
-            dict.put(kd.get(0), kd.get(1));
-        }
-        boolean addKey = false;
-        StringBuilder key = new StringBuilder();
-        StringBuilder res = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (c == '(') {
-                addKey = true;
-            } else if (c == ')') {
-                if (dict.containsKey(key.toString())) {
-                    res.append(dict.get(key.toString()));
-                } else {
-                    res.append('?');
+        int i = 0;
+        int j = i;
+        Map<String, String> mp = new HashMap<>();
+        StringBuilder ans = new StringBuilder();
+        knowledge.forEach(a -> {
+            mp.put(a.get(0), a.get(1));
+        });
+        while (i < s.length()) {
+            if (s.charAt(i) == '(') {
+                j = i + 1;
+                String key = "";
+                String value = "?";
+                while (s.charAt(j) != ')') {
+                    key += s.charAt(j);
+                    j++;
                 }
-                addKey = false;
-                key.setLength(0);
-            } else if (addKey) {
-                key.append(c);
+                ans.append(mp.getOrDefault(key.toString(), "?"));
+                i = j + 1;
             } else {
-                res.append(c);
+                ans.append(s.charAt(i));
+                i++;
             }
         }
-        return res.toString();
+        return ans.toString();
+
     }
 }
